@@ -1,0 +1,51 @@
+{
+  "name": "electron-quick-start",
+  "version": "1.0.0",
+  "description": "A minimal Electron application",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "webpack",
+    "buildandstart": "npm run build && npm run start"
+  },
+  "repository": "https://github.com/electron/electron-quick-start",
+  "keywords": [
+    "Electron",
+    "quick",
+    "start",
+    "tutorial",
+    "demo"
+  ],
+  "author": "Zhang Yuxing",
+  "license": "Apache License version 2.0",
+  "devDependencies": {
+    "babel-core": "^6.23.1",
+    "babel-helper-vue-jsx-merge-props": "^2.0.2",
+    "babel-loader": "^6.4.0",
+    "babel-plugin-syntax-jsx": "^6.18.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-plugin-transform-vue-jsx": "^3.4.1",
+    "babel-preset-es2015": "^6.22.0",
+    "babel-preset-stage-0": "^6.22.0",
+    "babel-runtime": "^6.23.0",
+    "electron": "^1.4.1",
+    "vue-loader": "^11.1.4",
+    "webpack": "^2.2.1"
+  },
+  "dependencies": {
+    "bootstrap-loader": "^2.0.0-beta.22",
+    "bootstrap-sass": "^3.3.7",
+    "css-loader": "^0.27.1",
+    "file-loader": "^0.10.1",
+    "html-loader": "^0.4.5",
+    "jquery": "^3.1.1",
+    "less-loader": "^3.0.0",
+    "node-sass": "^4.5.0",
+    "resolve-url-loader": "^2.0.2",
+    "sass-loader": "^6.0.3",
+    "style-loader": "^0.13.2",
+    "url-loader": "^0.5.8",
+    "vue-loader": "^11.1.4",
+    "vue-template-compiler": "^2.2.2"
+  }
+}

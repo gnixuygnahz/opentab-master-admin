@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Hello World!</title>
+    <script>
+        // 重命名 Electron 提供的 require
+        window.nodeRequire = require;
+        delete window.require;
+        delete window.exports;
+        delete window.module;
+    </script>
+
+
+</head>
+<body  style="-webkit-app-region: drag">
+<div class="container-fluid" id="app">
+</div>
+<script src="./bundle.js"></script>
+</body>
+</html>

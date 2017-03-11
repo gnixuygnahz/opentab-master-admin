@@ -1,0 +1,52 @@
+.op-menu li:hover{
+    background-color: #1f2131;
+}
+.op-menu li i{
+
+    display:block;
+    text-align:center;
+    vertical-align: middle;
+    height:25px;
+}
+
+.op-menu li i svg{
+    margin-top: 5px;
+}
+
+
+.op-header{
+    height:42px;
+    width:100%;
+    background-color:rgb(238, 238, 238);
+    -webkit-app-region: drag
+}
+
+.op-header div{
+    height: 100%;
+}
+
+.op-header-text{
+    color: #9496a8;
+    font-size: 13px;
+    padding:10px 15px;
+    display: block;
+    cursor: pointer;
+}
+
+.op-body{
+    height:658px;
+    width:100%;
+    background-color:#FFF;
+
+}
+
+.op-content{
+    height: 658px;
+    width: 920px;
+}
+
+body{
+    font-weight: 300;
+    line-height: 1.42857143;
+    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Microsoft Yahei","WenQuanYi Micro Hei",Arial,Verdana,sans-serif;
+}

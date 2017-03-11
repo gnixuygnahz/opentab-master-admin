@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Hello World!</title>
+    <script>
+        // 重命名 Electron 提供的 require
+        window.nodeRequire = require;
+        delete window.require;
+        delete window.exports;
+        delete window.module;
+    </script>
+    <link rel="stylesheet" href="./assets/css/zzsc.css">
+
+    <script type="text/javascript" src="./assets/js/jquery-3.1.1.min.js"></script>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="./assets/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="./assets/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <!--<link rel="stylesheet" href="./assets/css/normalize.css">-->
+
+  </head>
+  <body  style="-webkit-app-region: drag">
+  <div class="container-fluid">
+    <div id="config" style="padding:10px" class="hidden">
+    <form >
+      <img src="./assets/img/opentab-logo.png" class="img-responsive" alt="Responsive image">
+      <div class="form-group"  style="-webkit-app-region: no-drag">
+        <label for="appId">AppId</label>
+        <input type="email" class="form-control" id="appId">
+      </div>
+      <div class="form-group"  style="-webkit-app-region: no-drag">
+        <label for="masterKey">MasterKey</label>
+        <input type="email" class="form-control" id="masterKey">
+      </div>
+      <div class="form-group"  style="-webkit-app-region: no-drag">
+        <label for="host">服务器地址</label>
+        <input type="email" class="form-control" id="host">
+      </div>
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" id="rem"> 记住
+        </label>
+      </div>
+      <button type="button" class="btn btn-primary pull-right" onclick="configOp()">配置</button>
+      <button type="button" class="btn btn-link pull-right" onclick="window.close()">关闭</button>
+    </form>
+    </div>
+
+    <div id="loading" class="show center-block" style="margin-top: 170px">
+      <div class="square"></div>
+    </div>
+
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          ...
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+  </body>
+
+  <script type="text/javascript" src="./app/config.js"></script>
+
+</html>
