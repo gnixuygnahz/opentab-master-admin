@@ -81,7 +81,7 @@
 <script>
     import $ from 'jquery'
 
-    import 'bootstrap-table/dist/bootstrap-table.min.css'
+    import 'bootstrap-table/dist/bootstrap-table.css'
     import 'bootstrap-table'
 
 
@@ -93,7 +93,8 @@
                 classList:{},
                 table:{},
                 page:1,
-                limit:20
+                limit:10,
+                data:[]
             }
         },
         created: function () {
@@ -117,44 +118,65 @@
         },
         watch:{
             currentClass:function () {
+                const page=this
+
                 $('#table-root').empty()
                 $('#table-root').append('<table id="table"></table>')
                 this.table=$('#table')
 
+
+                var col=[{
+                    field: 'state',
+                    checkbox: true,
+                }]
+
+                this.classList.forEach(function(value, index, array) {
+                    if(value["className"]===page.currentClass){
+                        col=col.concat([{
+                            field: value.fieldName,
+                            title: value.fieldName
+                        }])
+                    }
+                });
+
+
+
                 this.table.bootstrapTable({
-                    columns: [ {
-                        field: 'state',
-                        checkbox: true,
-                    },{
-                        field: 'id',
-                        title: this.currentClass
-                    }, {
-                        field: 'name',
-                        title: 'Item Name'
-                    }, {
-                        field: 'price',
-                        title: 'Item Price'
-                    }],
-                    data: [{
-                        id: 1,
-                        name: 'Item 1',
-                        price: '$1'
-                    }, {
-                        id: 2,
-                        name: 'Item 2',
-                        price: '$2'
-                    }],
-                    pagination:true,
+                    columns: col,
+                    data: [],
                     idField:'id',
                     clickToSelect:true,
                     rowStyle: function (row, index) {
                         return { css:{
-                            padding:"1px 4px 2px 4px",
+                            padding:"2px 4px 2px 4px",
                             fontSize:"12px"
                         }
                         };
                     }
 
+                });
+
+                this.page=1
+
+                var query=[
+                    "limit="+this.limit,
+                    "skip="+(this.limit*(this.page-1))
+                ]
+
+                $.ajax({
+                    url: window.localStorage.getItem('host')+'/v1/classes/'+page.currentClass+'?'+query.join('&'),
+                    type: 'GET',
+                    headers:{
+                        "X-IC-Id":window.localStorage.getItem('appId'),
+                        "X-IC-Key":window.localStorage.getItem('masterKey')+",master"
+                    },
+                    success: function(result) {
+                        page.data=result.results
+                        page.table.load(page.data)
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                        alert('err')
+                    },
                 });
             }
         }
