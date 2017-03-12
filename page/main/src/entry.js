@@ -2,14 +2,14 @@
  * Created by anytime on 2017/3/11.
  */
 import Vue from 'vue'
-import $ from 'jquery'
+
 require('./assets/css/bootstrap.min.css')
 require('bootstrap')
 require('./assets/css/commen.css')
 
 const gl= require('./app/content/gl.vue')
 const jk = require('./app/content/jk.vue')
-const cc = require( './app/content/gl.vue')
+const cc = require( './app/content/cc.vue')
 const fx = require( './app/content/gl.vue')
 const zj = require( './app/content/gl.vue')
 const sz = require( './app/content/gl.vue')
