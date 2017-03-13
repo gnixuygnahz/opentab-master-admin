@@ -51,30 +51,37 @@
                 </div>
             </div>
             <div v-show="currentClass!==''">
-                <div class="table-menu">
-                    <div class="btn-group" role="group" aria-label="...">
-                        <button type="button" class="btn btn-default btn-sm">添加行</button>
-                        <button type="button" class="btn btn-default btn-sm">删除行</button>
-                        <button type="button" class="btn btn-default btn-sm">添加列</button>
-                        <button type="button" class="btn btn-default btn-sm">查询</button>
-                        <button type="button" class="btn btn-default btn-sm">刷新</button>
-                        <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">其他 <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">删除所以数据</a></li>
-                            <li><a href="#">删除Class</a></li>
-                            <li><a href="#">索引</a></li>
-                            <li><a href="#">权限设置</a></li>
-                        </ul>
-                        </div>
-                    </div>
 
-                    <button type="button" class="btn btn-default btn-sm">编辑单元格</button>
-                </div>
                 <div id="table-root"></div>
             </div>
         </div>
+
+
+        <!-- newRow -->
+        <div class="modal fade" id="newRow" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">添加行</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="newRowData" class="control-label">数据:</label>
+                                <textarea class="form-control" id="newRowData" style="height: 300px" v-model="newRowData"></textarea>
+                            </div>
+                        </form>
+                        <button type="button" class="btn btn-primary btn-sm" @click="newRowUseDemo">使用模版</button>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary" @click="newRowSave">保存</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </template>
 
@@ -91,10 +98,12 @@
             return {
                 currentClass:'',
                 classList:{},
+                fieldList:{},
                 table:{},
                 page:1,
                 limit:10,
-                data:[]
+                data:[],
+                newRowData:'{}'
             }
         },
         created: function () {
@@ -114,12 +123,49 @@
                     alert('err')
                 },
             });
+
+            $.ajax({
+                url: window.localStorage.getItem('host')+'/v1/master/allField',
+                type: 'GET',
+                headers:{
+                    "X-IC-Id":window.localStorage.getItem('appId'),
+                    "X-IC-Key":window.localStorage.getItem('masterKey')+",master"
+                },
+                success: function(result) {
+                    page.fieldList=result.results
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    alert('err')
+                },
+            });
+
+
             console.log('created')
         },
         watch:{
             currentClass:function () {
                 const page=this
+                $('#table-root').before(`<div class="table-menu">
+                    <div class="btn-group" role="group" aria-label="...">
+                        <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#newRow">添加行</button>
+                        <button type="button" class="btn btn-default btn-sm">删除行</button>
+                        <button type="button" class="btn btn-default btn-sm">添加列</button>
+                        <button type="button" class="btn btn-default btn-sm">查询</button>
+                        <button type="button" class="btn btn-default btn-sm">刷新</button>
+                        <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">其他 <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">删除所以数据</a></li>
+                            <li><a href="#">删除Class</a></li>
+                            <li><a href="#">索引</a></li>
+                            <li><a href="#">权限设置</a></li>
+                        </ul>
+                        </div>
+                    </div>
 
+                    <button type="button" class="btn btn-default btn-sm">编辑单元格</button>
+                </div>`)
                 $('#table-root').empty()
                 $('#table-root').append('<table id="table"></table>')
                 this.table=$('#table')
@@ -130,14 +176,17 @@
                     checkbox: true,
                 }]
 
-                this.classList.forEach(function(value, index, array) {
-                    if(value["className"]===page.currentClass){
+                this.fieldList.forEach(function(value, index, array) {
+                    console.log(value)
+                    if(value.className===page.currentClass){
                         col=col.concat([{
                             field: value.fieldName,
                             title: value.fieldName
                         }])
                     }
                 });
+
+                console.log(col)
 
 
 
@@ -146,6 +195,8 @@
                     data: [],
                     idField:'id',
                     clickToSelect:true,
+                    showColumns:true,
+                    toolbar:'.table-menu',
                     rowStyle: function (row, index) {
                         return { css:{
                             padding:"2px 4px 2px 4px",
@@ -172,7 +223,7 @@
                     },
                     success: function(result) {
                         page.data=result.results
-                        page.table.load(page.data)
+                        page.table.bootstrapTable('load',page.data)
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown) {
                         alert('err')
@@ -184,6 +235,88 @@
         methods:{
             lookClass:function (className) {
                 this.currentClass=className
+            },
+            newRowUseDemo:function () {
+                var page=this
+                var demo={}
+
+                this.fieldList.forEach(function(value, index, array) {
+                    console.log(value)
+                    if(value.className===page.currentClass&&value.fieldName!=="createdAt"&&value.fieldName!=="updatedAt"){
+                        switch (value._type){
+                            case "number":
+                                demo[value.fieldName]=0
+                                break
+                            case "string":
+                                demo[value.fieldName]=''
+                                break
+                            case "boolean":
+                                demo[value.fieldName]=true
+                                break
+                            case "date":
+                                demo[value.fieldName]='2017-03-13T05:59:35.685Z'
+                                break
+                            case "object":
+                                demo[value.fieldName]={}
+                                break
+                            case "array":
+                                demo[value.fieldName]=[]
+                                break
+                            case "pointer":
+                                demo[value.fieldName]={__type:"Pointer",id:1}
+                                break
+                            case "relation":
+                                demo[value.fieldName]=[]
+                                break
+                        }
+                    }
+                });
+                page.newRowData=JSON.stringify(demo)
+            },
+            newRowSave:function () {
+                var page = this
+                $.ajax({
+                    url: window.localStorage.getItem('host')+'/v1/classes/'+page.currentClass,
+                    type: 'POST',
+                    contentType: "application/json; charset=utf-8",
+                    dataType:'json',
+                    data:page.newRowData,
+                    headers:{
+                        "X-IC-Id":window.localStorage.getItem('appId'),
+                        "X-IC-Key":window.localStorage.getItem('masterKey')+",master"
+                    },
+                    success: function(result) {
+                        page.refresh()
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                        alert('err')
+                    },
+                });
+            },
+            refresh:function () {
+                var page=this
+                this.page=1
+
+                var query=[
+                    "limit="+this.limit,
+                    "skip="+(this.limit*(this.page-1))
+                ]
+
+                $.ajax({
+                    url: window.localStorage.getItem('host')+'/v1/classes/'+page.currentClass+'?'+query.join('&'),
+                    type: 'GET',
+                    headers:{
+                        "X-IC-Id":window.localStorage.getItem('appId'),
+                        "X-IC-Key":window.localStorage.getItem('masterKey')+",master"
+                    },
+                    success: function(result) {
+                        page.data=result.results
+                        page.table.bootstrapTable('load',page.data)
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                        alert('err')
+                    },
+                });
             }
         }
     }

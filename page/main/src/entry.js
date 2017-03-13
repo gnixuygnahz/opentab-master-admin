@@ -213,7 +213,7 @@ new Vue({
                         </ul>
                     </div>
 
-                    <div class="op-content pull-left">
+                    <div class="op-content pull-left" style={{WebkitAppRegion:'no-drag'}}>
                         {
                             function () {
                                 switch (page.menuKey){

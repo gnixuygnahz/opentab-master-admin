@@ -33,6 +33,7 @@
     "webpack": "^2.2.1"
   },
   "dependencies": {
+    "ace": "git+https://github.com/ajaxorg/ace.git#master",
     "bootstrap-loader": "^2.0.0-beta.22",
     "bootstrap-sass": "^3.3.7",
     "bootstrap-table": "git+https://github.com/gnixuygnahz/bootstrap-table.git#master",
